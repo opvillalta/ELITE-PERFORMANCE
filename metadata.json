@@ -1,0 +1,6 @@
+{
+  "name": "Rutinas de Gimnasio Elite",
+  "description": "Aplicación premium de entrenamiento físico para gestionar tus rutinas, registrar series, pesos, repeticiones, y visualizar el progreso general de rendimiento.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
