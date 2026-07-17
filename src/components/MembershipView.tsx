@@ -8,6 +8,7 @@ import { ShieldCheck, ShieldAlert, ShieldX, Calendar, CreditCard, MessageSquare 
 import { motion } from 'motion/react';
 import { ClientProfile } from '../types';
 import { Card } from './ui';
+import { MEMBERSHIP_CATALOG } from '../data';
 
 interface MembershipViewProps {
   client: ClientProfile;
@@ -15,6 +16,20 @@ interface MembershipViewProps {
 
 export default function MembershipView({ client }: MembershipViewProps) {
   const { membership } = client;
+
+  // Find plan details from catalog
+  const planId = parseInt(membership.id.split('-')[1]) || 100;
+  const plan = MEMBERSHIP_CATALOG.find(p => p.id === planId);
+  const planName = plan ? plan.name : 'Plan Básico';
+
+  // Format currency helper
+  const formatGuarani = (amount: number) => {
+    return new Intl.NumberFormat('es-PY', {
+      style: 'currency',
+      currency: 'PYG',
+      minimumFractionDigits: 0
+    }).format(amount);
+  };
 
   // Status mapping
   const statusConfig = {
@@ -63,7 +78,7 @@ export default function MembershipView({ client }: MembershipViewProps) {
   const strokeDashoffset = circumference - (pctRemaining / 100) * circumference;
 
   const handleRenewClick = () => {
-    const message = `Hola NitroGym! Deseo renovar mi membresía ${membership.type}. Mi código es ${client.clientCode}.`;
+    const message = `Hola NitroGym! Deseo renovar mi membresía de ${planName} (${membership.type}). Mi código es ${client.clientCode}.`;
     const whatsappUrl = `https://wa.me/50688888888?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
   };
@@ -83,17 +98,20 @@ export default function MembershipView({ client }: MembershipViewProps) {
       >
         <Card className="bg-[#111111]/80 border-white/5 backdrop-blur-xl rounded-3xl p-6 shadow-xl relative overflow-hidden">
           <div className="flex justify-between items-start">
-            <div>
+            <div className="max-w-[65%]">
               <span className="text-[10px] font-bold text-white/40 uppercase tracking-widest block mb-1">
                 Plan Actual
               </span>
-              <h2 className="text-3xl font-black text-white italic tracking-tight font-display mb-3">
-                NITRO {membership.type.toUpperCase()}
+              <h2 className="text-2xl font-black text-white italic tracking-tight font-display mb-1 leading-tight">
+                {planName.toUpperCase()}
               </h2>
+              <span className="text-[10px] font-bold text-[var(--accent)] uppercase tracking-wider block">
+                Frecuencia: {membership.type}
+              </span>
             </div>
             
-            <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-semibold ${currentStatus.color} ${currentStatus.bgColor} ${currentStatus.borderColor}`}>
-              <StatusIcon className="w-4 h-4" />
+            <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-[10px] font-semibold whitespace-nowrap ${currentStatus.color} ${currentStatus.bgColor} ${currentStatus.borderColor}`}>
+              <StatusIcon className="w-3.5 h-3.5" />
               <span>{currentStatus.text}</span>
             </div>
           </div>
@@ -180,8 +198,8 @@ export default function MembershipView({ client }: MembershipViewProps) {
               <span className="text-[10px] font-bold text-white/40 uppercase tracking-wide block mb-1">
                 Monto Sugerido
               </span>
-              <p className="text-lg font-black text-white">
-                ${membership.nextPaymentAmount.toFixed(2)}
+              <p className="text-lg font-black text-white italic font-bebas">
+                {formatGuarani(membership.nextPaymentAmount)}
               </p>
             </div>
           </div>

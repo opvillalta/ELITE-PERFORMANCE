@@ -8,6 +8,7 @@ import { CreditCard, ArrowUpRight, CheckCircle2, AlertTriangle, Receipt } from '
 import { motion } from 'motion/react';
 import { ClientProfile, Payment } from '../types';
 import { Card } from './ui';
+import { MEMBERSHIP_CATALOG } from '../data';
 
 interface PaymentHistoryViewProps {
   client: ClientProfile;
@@ -15,6 +16,20 @@ interface PaymentHistoryViewProps {
 
 export default function PaymentHistoryView({ client }: PaymentHistoryViewProps) {
   const { payments } = client;
+
+  // Format currency helper
+  const formatGuarani = (amount: number) => {
+    return new Intl.NumberFormat('es-PY', {
+      style: 'currency',
+      currency: 'PYG',
+      minimumFractionDigits: 0
+    }).format(amount);
+  };
+
+  // Find plan details from catalog
+  const planId = parseInt(client.membership.id.split('-')[1]) || 100;
+  const plan = MEMBERSHIP_CATALOG.find(p => p.id === planId);
+  const planName = plan ? plan.name : 'Plan Básico';
 
   const getStatusBadge = (status: Payment['status']) => {
     switch (status) {
@@ -59,24 +74,16 @@ export default function PaymentHistoryView({ client }: PaymentHistoryViewProps) 
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
       >
-        <Card className="bg-gradient-to-br from-[#111111] to-[#161616] border-white/5 p-5 rounded-3xl flex items-center justify-between shadow-lg">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-[var(--accent)]/10 flex items-center justify-center text-[var(--accent)] border border-[var(--accent)]/15">
-              <CreditCard className="w-5 h-5" />
-            </div>
-            <div>
-              <span className="text-[10px] font-bold text-white/40 uppercase tracking-wider block">
-                Historial de Transacciones
-              </span>
-              <span className="text-sm font-semibold text-white/80">
-                {payments.length} Facturas registradas
-              </span>
-            </div>
+        <Card className="bg-gradient-to-br from-[#111111] to-[#161616] border-white/5 p-5 rounded-3xl flex items-center gap-3 shadow-lg">
+          <div className="w-10 h-10 rounded-2xl bg-[var(--accent)]/10 flex items-center justify-center text-[var(--accent)] border border-[var(--accent)]/15">
+            <CreditCard className="w-5 h-5" />
           </div>
-          <div className="text-right">
-            <span className="text-[10px] font-bold text-white/40 uppercase block">Total Abonado</span>
-            <span className="text-xl font-black text-white italic font-display">
-              ${totalPaid.toFixed(2)}
+          <div>
+            <span className="text-[10px] font-bold text-white/40 uppercase tracking-wider block">
+              Historial de Transacciones
+            </span>
+            <span className="text-sm font-semibold text-white/80">
+              {payments.length} Facturas registradas
             </span>
           </div>
         </Card>
@@ -107,7 +114,7 @@ export default function PaymentHistoryView({ client }: PaymentHistoryViewProps) 
                     <div className="space-y-1">
                       <div className="flex items-center gap-2">
                         <span className="text-sm font-bold text-white leading-tight">
-                          NITRO {client.membership.type}
+                          {planName}
                         </span>
                         {getStatusBadge(payment.status)}
                       </div>
@@ -123,8 +130,8 @@ export default function PaymentHistoryView({ client }: PaymentHistoryViewProps) 
                   </div>
 
                   <div className="text-right space-y-1">
-                    <span className="text-base font-black text-white leading-none">
-                      ${payment.amount.toFixed(2)}
+                    <span className="text-base font-black text-white leading-none italic font-bebas">
+                      {formatGuarani(payment.amount)}
                     </span>
                     <span className="text-[10px] text-white/40 block">
                       {payment.date}

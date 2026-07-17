@@ -10,23 +10,23 @@ export const CLIENTS_MOCK_DATA: ClientProfile[] = [
     clientCode: 'NITRO-001',
     name: 'Juan',
     lastName: 'Pérez',
-    phone: '+506 8888-8888',
+    phone: '+595 981 123456',
     avatarInitials: 'JP',
     membership: {
-      id: 'memb-001',
-      type: 'Mensual',
+      id: 'memb-101',
+      type: 'Mensual', // Periodic type
       status: 'Activa',
       startDate: '2026-07-10',
       endDate: '2026-08-10',
       nextPaymentDate: '2026-08-10',
-      nextPaymentAmount: 35.00,
+      nextPaymentAmount: 200000, // Musculacion + Cardio (200,000 Gs.)
       daysRemaining: 25
     },
     payments: [
       {
         id: 'pay-001',
         date: '2026-07-10',
-        amount: 35.00,
+        amount: 200000,
         method: 'Tarjeta',
         status: 'Pagado',
         period: 'Julio - Agosto 2026',
@@ -35,7 +35,7 @@ export const CLIENTS_MOCK_DATA: ClientProfile[] = [
       {
         id: 'pay-002',
         date: '2026-06-10',
-        amount: 35.00,
+        amount: 200000,
         method: 'Efectivo',
         status: 'Pagado',
         period: 'Junio - Julio 2026',
@@ -44,7 +44,7 @@ export const CLIENTS_MOCK_DATA: ClientProfile[] = [
       {
         id: 'pay-003',
         date: '2026-05-10',
-        amount: 35.00,
+        amount: 200000,
         method: 'Transferencia',
         status: 'Pagado',
         period: 'Mayo - Junio 2026',
@@ -116,27 +116,27 @@ export const CLIENTS_MOCK_DATA: ClientProfile[] = [
     clientCode: 'NITRO-002',
     name: 'María',
     lastName: 'García',
-    phone: '+506 7777-7777',
+    phone: '+595 981 654321',
     avatarInitials: 'MG',
     membership: {
-      id: 'memb-002',
-      type: 'Trimestral',
+      id: 'memb-102',
+      type: 'Mensual',
       status: 'Por vencer',
-      startDate: '2026-04-18',
+      startDate: '2026-06-18',
       endDate: '2026-07-18',
       nextPaymentDate: '2026-07-18',
-      nextPaymentAmount: 95.00,
+      nextPaymentAmount: 200000, // Entrenamiento Funcional (200,000 Gs.)
       daysRemaining: 2
     },
     payments: [
       {
         id: 'pay-004',
-        date: '2026-04-18',
-        amount: 95.00,
+        date: '2026-06-18',
+        amount: 200000,
         method: 'Tarjeta',
         status: 'Pagado',
-        period: 'Abril - Julio 2026',
-        receiptId: 'REC-2026-0418'
+        period: 'Junio - Julio 2026',
+        receiptId: 'REC-2026-0618'
       }
     ],
     attendance: {
@@ -186,27 +186,27 @@ export const CLIENTS_MOCK_DATA: ClientProfile[] = [
     clientCode: 'NITRO-003',
     name: 'Carlos',
     lastName: 'Ruiz',
-    phone: '+506 6666-6666',
+    phone: '+595 981 987654',
     avatarInitials: 'CR',
     membership: {
-      id: 'memb-003',
-      type: 'Anual',
+      id: 'memb-100',
+      type: 'Mensual',
       status: 'Vencida',
-      startDate: '2025-06-30',
+      startDate: '2026-05-30',
       endDate: '2026-06-30',
       nextPaymentDate: '2026-06-30',
-      nextPaymentAmount: 320.00,
+      nextPaymentAmount: 150000, // Plan Basico (150,000 Gs.)
       daysRemaining: 0
     },
     payments: [
       {
         id: 'pay-005',
-        date: '2025-06-30',
-        amount: 320.00,
+        date: '2026-05-30',
+        amount: 150000,
         method: 'Transferencia',
         status: 'Pagado',
-        period: 'Junio 2025 - Junio 2026',
-        receiptId: 'REC-2025-0630'
+        period: 'Mayo - Junio 2026',
+        receiptId: 'REC-2026-0530'
       }
     ],
     attendance: {
@@ -236,4 +236,20 @@ export const CLIENTS_MOCK_DATA: ClientProfile[] = [
       }
     ]
   }
+];
+
+export const MEMBERSHIP_CATALOG = [
+  { id: 100, name: 'Plan Basico', price: 150000 },
+  { id: 101, name: 'Musculacion + Cardio', price: 200000 },
+  { id: 102, name: 'Entrenamiento Funcional', price: 200000 },
+  { id: 103, name: 'Rehabilitacion', price: 300000 },
+  { id: 104, name: 'Funcional Kids', price: 300000 },
+  { id: 105, name: 'Musculacion Dia', price: 20000 },
+  { id: 106, name: 'Musculacion + Cardio Dia', price: 25000 },
+  { id: 107, name: 'Gratis', price: 0 },
+  { id: 108, name: 'Familiar', price: 130000 },
+  { id: 109, name: 'funcional KIDS II', price: 200000 },
+  { id: 110, name: 'Zumba Fitness', price: 25000 },
+  { id: 111, name: 'Zumba Fitness Promo', price: 20000 },
+  { id: 112, name: 'Plan cooperativo', price: 180000 }
 ];
