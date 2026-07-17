@@ -21,10 +21,10 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const variantClasses: Record<ButtonVariant, string> = {
-  primary: 'bg-[#BFFF00] hover:bg-[#A8E600] text-black border-transparent shadow-[#BFFF00]/30',
-  accent: 'bg-[color:var(--accent)] hover:bg-[color:var(--accent-strong)] text-slate-950 shadow-[0_15px_35px_-20px_rgba(34,197,94,0.7)] border-transparent',
-  secondary: 'bg-white/10 hover:bg-white/20 text-white border-white/10',
-  ghost: 'bg-transparent hover:bg-white/10 text-white border-white/10',
+  primary: 'bg-[var(--accent)] hover:bg-[var(--accent-strong)] text-white border-transparent shadow-[var(--accent)]/30',
+  accent: 'bg-[color:var(--accent)] hover:bg-[color:var(--accent-strong)] text-white shadow-[0_15px_35px_-20px_rgba(255,92,0,0.7)] border-transparent',
+  secondary: 'bg-white/10 hover:bg-white/20 text-white border-white/10 border',
+  ghost: 'bg-transparent hover:bg-white/10 text-white border-transparent',
 };
 
 const sizeClasses: Record<ButtonSize, string> = {
@@ -47,7 +47,7 @@ export default function Button({
     <button
       {...props}
       disabled={isDisabled}
-      className={`inline-flex items-center justify-center gap-2 rounded-full font-black tracking-wide transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#BFFF00] disabled:cursor-not-allowed disabled:opacity-60 ${variantClasses[variant]} ${sizeClasses[size]} ${className}`}
+      className={`inline-flex items-center justify-center gap-2 rounded-full font-black tracking-wide transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] disabled:cursor-not-allowed disabled:opacity-60 ${variantClasses[variant]} ${sizeClasses[size]} ${className}`}
     >
       {loading ? (
         <span className="inline-flex items-center gap-2">

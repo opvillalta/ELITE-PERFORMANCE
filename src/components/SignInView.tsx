@@ -4,47 +4,52 @@
  */
 
 import React, { useState } from 'react';
-import { Mail, Lock, LogIn, Chrome } from 'lucide-react';
+import { Shield, KeyRound, Sparkles } from 'lucide-react';
 import { motion } from 'motion/react';
 import { Button, Card, Input } from './ui';
+import { CLIENTS_MOCK_DATA } from '../data';
 
 interface SignInProps {
-  onSignInSuccess: (email: string) => void;
+  onSignInSuccess: (clientCode: string) => void;
 }
 
 export default function SignInView({ onSignInSuccess }: SignInProps) {
-  const [email, setEmail] = useState('nombre@ejemplo.com');
-  const [password, setPassword] = useState('password123');
+  const [clientCode, setClientCode] = useState('NITRO-001');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email || !password) {
-      setError('Por favor completa todos los campos.');
+    if (!clientCode.trim()) {
+      setError('Por favor ingresa tu código de cliente.');
       return;
     }
     setLoading(true);
     setError('');
-    setTimeout(() => {
-      setLoading(false);
-      onSignInSuccess(email);
-    }, 850);
-  };
 
-  const handleGoogleLogin = () => {
-    setLoading(true);
     setTimeout(() => {
+      const codeUpper = clientCode.trim().toUpperCase();
+      const clientExists = CLIENTS_MOCK_DATA.some(c => c.clientCode === codeUpper);
+
       setLoading(false);
-      onSignInSuccess('google.user@gmail.com');
+      if (clientExists) {
+        onSignInSuccess(codeUpper);
+      } else {
+        setError('Código inválido. Usá NITRO-001, NITRO-002 o NITRO-003.');
+      }
     }, 700);
   };
 
+  const handleSelectDemo = (code: string) => {
+    setClientCode(code);
+    setError('');
+  };
+
   return (
-    <div className="relative min-h-screen bg-black text-white flex flex-col items-center justify-between px-6 py-12 font-sans overflow-hidden">
+    <div className="relative min-h-screen bg-[#070707] text-white flex flex-col items-center justify-between px-6 py-12 font-sans overflow-hidden">
       {/* Background subtle glow */}
-      <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-[#D4FF00]/10 blur-[120px] rounded-full"></div>
-      <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-[#D4FF00]/5 blur-[120px] rounded-full"></div>
+      <div className="absolute top-[-10%] left-[-10%] w-[45%] h-[45%] bg-[var(--accent)]/10 blur-[130px] rounded-full pointer-events-none"></div>
+      <div className="absolute bottom-[-10%] right-[-10%] w-[45%] h-[45%] bg-[var(--accent)]/5 blur-[130px] rounded-full pointer-events-none"></div>
 
       <motion.div
         initial={{ opacity: 0, y: -20 }}
@@ -52,11 +57,11 @@ export default function SignInView({ onSignInSuccess }: SignInProps) {
         transition={{ duration: 0.6 }}
         className="text-center mt-6 w-full z-10"
       >
-        <h1 className="text-4xl md:text-5xl font-black tracking-tighter text-white mb-2 mt-2 uppercase">
-          ELITE PERFORMANCE
+        <h1 className="text-5xl md:text-6xl font-black tracking-tighter text-white mb-2 mt-2 uppercase font-display italic">
+          NITRO <span className="text-[var(--accent)]">GYM</span>
         </h1>
-        <p className="text-white/50 text-sm md:text-base font-normal tracking-wide">
-          Unlock your true potential today.
+        <p className="text-white/40 text-xs md:text-sm font-bold tracking-widest uppercase">
+          Portal de Consulta para Clientes
         </p>
       </motion.div>
 
@@ -66,117 +71,85 @@ export default function SignInView({ onSignInSuccess }: SignInProps) {
         transition={{ delay: 0.15, duration: 0.5 }}
         className="w-full max-w-md relative z-10"
       >
-        <Card className="bg-[#121212] border-white/5 backdrop-blur-xl rounded-3xl p-8 my-8 shadow-2xl">
-          <h2 className="text-2xl font-bold text-white mb-6 text-left tracking-tight">Sign In</h2>
-
-          <Button
-            type="button"
-            onClick={handleGoogleLogin}
-            variant="secondary"
-            size="lg"
-            className="w-full justify-center gap-3 text-[15px] py-4 mb-5 bg-white text-black hover:bg-gray-100 border-none"
-          >
-            <Chrome className="w-5 h-5" />
-            Continuar con Google
-          </Button>
-
-          <div className="flex items-center my-6">
-            <div className="flex-1 border-t border-white/10"></div>
-            <span className="px-3 text-[10px] text-white/40 font-bold tracking-widest uppercase">O CON CORREO</span>
-            <div className="flex-1 border-t border-white/10"></div>
+        <Card className="bg-[#111111] border-white/5 backdrop-blur-xl rounded-3xl p-8 my-8 shadow-2xl">
+          <div className="flex items-center gap-2 mb-6">
+            <KeyRound className="w-5 h-5 text-[var(--accent)]" />
+            <h2 className="text-xl font-bold text-white tracking-tight">Acceso Clientes</h2>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-5">
+          <form onSubmit={handleSubmit} className="space-y-6">
             {error && (
-              <div className="bg-red-500/10 text-red-300 text-xs py-2 px-3 rounded-lg border border-red-500/20">
+              <motion.div 
+                initial={{ opacity: 0, y: -5 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="bg-red-500/10 text-red-400 text-xs py-3 px-4 rounded-xl border border-red-500/20 font-semibold"
+              >
                 {error}
-              </div>
+              </motion.div>
             )}
 
             <Input
-              id="sign-in-email"
-              label="Correo Electrónico"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="nombre@ejemplo.com"
-              icon={<Mail className="w-5 h-5" />}
+              id="client-code-input"
+              label="Ingresá tu Código de Cliente"
+              type="text"
+              value={clientCode}
+              onChange={(e) => setClientCode(e.target.value)}
+              placeholder="Ej: NITRO-001"
+              icon={<Shield className="w-5 h-5 text-white/40" />}
+              className="w-full"
+              autoComplete="off"
               required
             />
 
-            <div className="space-y-2">
-              <div className="flex justify-between items-center">
-                <span className="text-sm font-semibold text-white/70">Contraseña</span>
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => alert('Recuperación de contraseña simulada: Reestablece tu clave.')}
-                  className="text-xs text-[#BFFF00] hover:text-[#A8E600] font-bold transition-colors"
-                >
-                  ¿Olvidaste?
-                </Button>
-              </div>
-              <Input
-                id="sign-in-password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
-                icon={<Lock className="w-5 h-5 text-white/40" />}
-                required
-              />
-            </div>
-
-            <Button type="submit" variant="primary" size="lg" className="w-full justify-center py-4 mt-2 bg-[#BFFF00] text-black hover:bg-[#A8E600] font-black uppercase tracking-wider border-none">
-              {loading ? (
-                <span className="animate-spin rounded-full h-5 w-5 border-2 border-black border-t-transparent" />
-              ) : (
-                'INGRESAR'
-              )}
+            <Button 
+              type="submit" 
+              variant="primary" 
+              size="lg" 
+              className="w-full justify-center py-4 mt-2 bg-[var(--accent)] text-white hover:bg-[var(--accent-strong)] font-black uppercase tracking-wider border-none rounded-2xl shadow-lg"
+              loading={loading}
+            >
+              INGRESAR AL PORTAL
             </Button>
           </form>
 
-          <div className="mt-6 text-center text-sm text-white/50 font-normal">
-            ¿No tienes cuenta?{' '}
-            <Button
-              type="button"
-              variant="ghost"
-              size="sm"
-              className="text-[#BFFF00] hover:text-[#A8E600] font-bold"
-              onClick={() => {
-                setEmail('admin.gym@elite.com');
-                setPassword('gym123');
-                alert('Cuenta de demostración automática cargada. ¡Usa Ingresar!');
-              }}
-            >
-              Regístrate gratis
-            </Button>
+          <div className="mt-8 pt-6 border-t border-white/5">
+            <div className="flex items-center gap-1.5 mb-3 text-white/40 text-xs font-bold uppercase tracking-wide">
+              <Sparkles className="w-3.5 h-3.5 text-[var(--accent)]" />
+              <span>Códigos de Prueba (Demo)</span>
+            </div>
+            <div className="grid grid-cols-3 gap-2">
+              <button
+                type="button"
+                onClick={() => handleSelectDemo('NITRO-001')}
+                className={`py-2 px-1 text-xs rounded-xl font-semibold border transition-all ${clientCode.toUpperCase() === 'NITRO-001' ? 'border-[var(--accent)] bg-[var(--accent-soft)] text-white' : 'border-white/10 bg-white/5 text-white/60 hover:bg-white/10 hover:text-white'}`}
+              >
+                NITRO-001
+                <span className="block text-[8px] text-white/40 font-normal">Activa</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => handleSelectDemo('NITRO-002')}
+                className={`py-2 px-1 text-xs rounded-xl font-semibold border transition-all ${clientCode.toUpperCase() === 'NITRO-002' ? 'border-[var(--accent)] bg-[var(--accent-soft)] text-white' : 'border-white/10 bg-white/5 text-white/60 hover:bg-white/10 hover:text-white'}`}
+              >
+                NITRO-002
+                <span className="block text-[8px] text-white/40 font-normal">Por vencer</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => handleSelectDemo('NITRO-003')}
+                className={`py-2 px-1 text-xs rounded-xl font-semibold border transition-all ${clientCode.toUpperCase() === 'NITRO-003' ? 'border-[var(--accent)] bg-[var(--accent-soft)] text-white' : 'border-white/10 bg-white/5 text-white/60 hover:bg-white/10 hover:text-white'}`}
+              >
+                NITRO-003
+                <span className="block text-[8px] text-white/40 font-normal">Vencida</span>
+              </button>
+            </div>
           </div>
         </Card>
       </motion.div>
 
       <div className="w-full max-w-sm text-center z-10">
-        <div className="flex justify-center gap-6 mb-8">
-          <div className="flex flex-col items-center gap-1.5">
-            <Button type="button" variant="ghost" size="sm" className="w-12 h-12 rounded-full bg-[#1A1A1A] text-white hover:bg-white/10 border border-white/10">
-              <span className="text-[10px] font-bold">iOS</span>
-            </Button>
-            <span className="text-xs text-white/60 font-medium">Apple</span>
-          </div>
-
-          <div className="flex flex-col items-center gap-1.5">
-            <Button type="button" variant="ghost" size="sm" className="w-12 h-12 rounded-full bg-[#1A1A1A] text-white hover:bg-white/10 border border-white/10">
-              <span className="text-lg font-bold text-[#BFFF00]">f</span>
-            </Button>
-            <span className="text-xs text-white/60 font-medium">Facebook</span>
-          </div>
-        </div>
-
         <p className="text-[11px] leading-relaxed text-white/40 px-4">
-          Al continuar, aceptas nuestros{' '}
-          <span className="underline hover:text-white/60 cursor-pointer">Términos de Servicio</span> y{' '}
-          <span className="underline hover:text-white/60 cursor-pointer">Política de Privacidad</span>.
+          Si tenés dudas con tu código de acceso, consultá en la recepción de tu sucursal.
         </p>
       </div>
     </div>

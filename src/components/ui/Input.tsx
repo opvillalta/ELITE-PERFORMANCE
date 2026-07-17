@@ -27,7 +27,7 @@ export default function Input({
         <input
           id={id}
           {...props}
-          className={`w-full rounded-2xl bg-black/20 border border-white/10 py-3 pr-4 text-sm text-white placeholder-white/30 focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400 transition-colors ${icon ? 'pl-12' : 'pl-4'}`}
+          className={`w-full rounded-2xl bg-black/20 border border-white/10 py-3 pr-4 text-sm text-white placeholder-white/30 focus:outline-none focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)] transition-colors ${icon ? 'pl-12' : 'pl-4'}`}
         />
       </div>
       {error && <p className="mt-2 text-xs text-red-300">{error}</p>}
